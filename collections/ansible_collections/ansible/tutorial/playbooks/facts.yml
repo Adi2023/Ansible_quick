@@ -1,0 +1,19 @@
+---
+- name: Gather facts
+  hosts: redhat
+  gather_facts: false
+
+  tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+        gather_subset:
+          - '!all'
+          - '!min'
+          - 'os_family'
+
+    - name: Write facts to file 
+      ansible.builtin.copy:
+        dest: redhat-facts.yml
+        content: "{{ ansible_facts | to_yaml }}"
+        mode: "0644"
+      delegate_to: localhost  

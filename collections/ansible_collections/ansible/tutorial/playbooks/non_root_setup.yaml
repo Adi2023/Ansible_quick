@@ -1,0 +1,18 @@
+---
+- name: Create non-root user for ansible 
+  hosts: lxc
+  gather_facts: false
+
+  tasks:
+    - name: Install sudo
+      ansible.builtin.import_role:
+        name: ansible.tutorial.package
+      vars:
+        package_name: sudo  
+
+    - name: Create an ansible user
+      ansible.builtin.import_role:
+        name: ansible.tutorial.user   
+      vars:
+        user_name: ansible
+        user_sudo: true

@@ -1,0 +1,24 @@
+---
+
+# gather facts if we dont have it
+- name: Gather facts 
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - 'os_family'
+  when: | 
+    'os_family' is not in ansible_facts
+    
+# if we are in supported family then only update package cache
+- name: Root Block
+  become: true
+  block: 
+    - name: Update package cache
+      ansible.builtin.include_tasks:
+        file: "{{ ansible_facts.os_family }}.yml"
+      when: ansible_facts.os_family is in supported_families
+      vars:
+        supported_families:
+        - Debian
+        - Redhat
