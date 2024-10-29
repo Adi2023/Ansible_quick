@@ -6,7 +6,7 @@ argument_specs:
       - Creates user account.
       - Adds sudo privileges if sudo_user is true.
     author:
-      - John Ratliff <john@technoplaza.net>
+      - Aditya Kamath <adityakamath223@gmail.com>
     options:
       user_key_file:
         type: str

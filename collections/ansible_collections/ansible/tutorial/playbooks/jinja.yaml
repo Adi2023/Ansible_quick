@@ -1,0 +1,54 @@
+---
+- name: Test jinja in Ansible
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Load json data from file
+      ansible.builtin.set.fact: # store value in variable
+        json_data: "{{  lookup('ansible.builtin.file', 'files/jinja.json') | from_json }}" 
+        # learn what is lookup plugin
+
+    - name: Display json data
+      ansible.builtin.debug:
+        var: json_data    
+
+    - name: Display server_names 
+      ansible.builtin.debug:
+        var: server_names
+      vars:
+        server_names: |
+          {{
+           json_data['domain']['server'] 
+           | map(attribute='name', default='false') 
+           | select 
+           | list
+          }}
+
+    - name: Display server_names with json_query
+      ansible.builtin.debug:
+        var: server_names
+      vars:
+        server_names: |
+          {{
+           json_data
+           | community.general.json_query('domain.server[*].name')
+          }}     
+
+    - name: Configure gitconfig
+      ansible.builtin.import_role:
+        name: sysengquick.tutorial.gitconfig  
+      vars:
+        gitconfig_name: Aditya Kamath
+        gitconfig_email: adityakamath223@gmail.com       
+        gitconfig_use_vscode: true
+        gitconfig_aliases:
+          - name: oneline
+            value: log --oneline
+      when: |
+        lookup('ansible.builtin.env', 'USER') 
+        is in ['ansible', 'vscode']
+       
+       
+# use ansible test to test whether user is ansible or vscode or
+# use is ansible.builtin.regex('^(ansible|vscode)$') instead of in

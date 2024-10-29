@@ -1,0 +1,7 @@
+---
+- name: Write gitconfig 
+  ansible.builtin.template:
+    src: gitconfig.j2
+    dest: "{{ lookup('ansible_builtin.env', 'HOME') }}/ .gitconfig"
+    mode: "0644"
+    

@@ -1,3 +1,4 @@
----
-user_key_file: "/private/ssh/ansible.pub"
-user_sudo: false
+# ---
+# user_key_file: "/private/ssh/ansible.pub"
+# user_sudo: false
+# user_name: 
